@@ -1,20 +1,30 @@
 import express from 'express'
 import Post from '../models/Post.js'
 import asyncWrapper from '../middlewares/asyncWrapper.js';
-
+import { uploadFiles } from '../firebase/uploadFiles.js';
+import multer from 'multer';
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Create a new post
-router.post('/', async (req, res) => {
-  try {
-    const post = new Post(req.body);
-    await post.save();
-    res.status(201).json(post);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+router.post('/', upload.array('images', 5), asyncWrapper(async (req, res) => {
+  const { title, content } = req.body;
+  const files = req.files;
+
+  // Upload the images and get the image URLs
+  const imageLinks = await uploadFiles(files);
+
+  // Create a new post instance with the uploaded image URLs
+  const post = new Post({
+    title,
+    content,
+    images: imageLinks, // Save the image URLs in the "images" field
+  });
+
+  await post.save();
+  res.status(201).json(post);
+}));
 
 // Update an existing post
 router.put('/posts/:id', asyncWrapper(async (req, res) => {
@@ -30,7 +40,7 @@ router.put('/posts/:id', asyncWrapper(async (req, res) => {
   }));
 
 // Get all posts
-router.get('/posts', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const posts = await Post.find();
     res.json(posts);
