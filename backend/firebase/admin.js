@@ -8,6 +8,5 @@ const firebaseAdmin = admin.initializeApp({
   storageBucket: process.env.FIREBASE_STORAGE_GS_LINK 
 });
 
-console.log(Object.keys(firebaseAdmin.storage))
 
 export default firebaseAdmin;
