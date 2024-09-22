@@ -28,9 +28,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <div>
-                {role === "admin" ? "Admin Dashboard" : role === "staff" ? "Staff Dashboard" : "User Dashboard"}
-            </div>
+            <h1>User Dashboard</h1>
             <button onClick={handleLogout}>Log out</button>
         </>
     );

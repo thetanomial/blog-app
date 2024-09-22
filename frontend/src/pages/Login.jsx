@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { login } from '../services/authService'; 
+import { getCurrentUser, login } from '../services/authService'; 
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-    const { dispatch } = useContext(AuthContext);
+    const { state,dispatch } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -22,10 +22,19 @@ const Login = () => {
             
             // Dispatch login success action
             dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+            const currentUser = await getCurrentUser(); // Fetch the current user
+            dispatch({ type: 'SET_USER', payload: currentUser });
             toast.success("Login successful");
 
             // Redirect to home page
-            navigate('/');
+
+            if (currentUser.role==="admin"){
+                navigate("/admin-dashboard")
+            }else{
+
+
+                navigate("/")
+            }
         } catch (error) {
             if (error.code === "ERR_NETWORK") {
                 toast.error("Cannot connect to the backend server. Please make sure the server is running.");

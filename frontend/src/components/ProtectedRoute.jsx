@@ -6,16 +6,18 @@ import { getCurrentUser } from '../services/authService';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
     const { state, dispatch } = useContext(AuthContext);
-    const [loading, setLoading] = useState(true); // Local loading state
-    const [error, setError] = useState(null); // Local error state
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                await getCurrentUser(); // Fetch the current user
-                setLoading(false);
+                const currentUser = await getCurrentUser(); // Fetch the current user
+                dispatch({ type: 'SET_USER', payload: currentUser }); // Update the state with the current user
             } catch (err) {
                 setError(err);
+                localStorage.removeItem('token'); // Clear token on error
+            } finally {
                 setLoading(false);
             }
         };
@@ -33,7 +35,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
     const userRole = state.user ? state.user.role : null;
     if (allowedRoles && !allowedRoles.includes(userRole)) {
-        return <Navigate to="/forbidden" replace />; // Redirect if role is not allowed
+        localStorage.removeItem('token'); // Remove token if access is forbidden
+        return <Navigate to="/forbidden" replace />;
     }
 
     return children; // Render the protected component

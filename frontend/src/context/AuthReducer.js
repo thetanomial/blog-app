@@ -9,9 +9,10 @@ const AuthReducer = (state, action) => {
                 loading: false,
             };
         case 'SET_USER':
+            
             return {
                 ...state,
-                user: action.payload, // Set the user details
+                user: {...action.payload}, // Set the user details
                 isAuthenticated: true,
                 loading: false,
             };
