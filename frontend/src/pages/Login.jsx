@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { login } from '../services/authService';
+import { login } from '../services/authService'; 
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -9,32 +9,40 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         const userData = { email, password };
+        setLoading(true);
+
         try {
             const data = await login(userData);
             localStorage.setItem('token', data.token); // Save token to local storage
-            dispatch({ type: 'LOGIN_SUCCESS', payload: data });
-            toast.success("Login successful")
-            navigate('/'); // Redirect to the protected route
-        } catch (error) {
+            
+            // Dispatch login success action
+            dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+            toast.success("Login successful");
 
-            if (error.code == "ERR_NETWORK"){
-               return toast.error("Cannot connect to the backend server. Please make sure, the server is running.")
-            }
-            console.log(error)
-            if (error.response && error.response.data.errors) {
-                error.response.data.errors.forEach(err => {
-                    toast.error(err.msg); // Display each error message in the toast
-                });
-            } else if (error.response && error.response.data.msg) {
-                // Display single error message if no errors array exists
-                toast.error(error.response.data.msg);
+            // Redirect to home page
+            navigate('/');
+        } catch (error) {
+            if (error.code === "ERR_NETWORK") {
+                toast.error("Cannot connect to the backend server. Please make sure the server is running.");
             } else {
-                toast.error("An unexpected error occurred.");
+                console.log(error);
+                if (error.response && error.response.data.errors) {
+                    error.response.data.errors.forEach(err => {
+                        toast.error(err.msg);
+                    });
+                } else if (error.response && error.response.data.msg) {
+                    toast.error(error.response.data.msg);
+                } else {
+                    toast.error("An unexpected error occurred.");
+                }
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -62,7 +70,8 @@ const Login = () => {
                         required 
                     />
                 </div>
-                <button type="submit" className="form-button">Login</button>
+                <button type="submit" className="form-button" disabled={loading}>Login</button>
+                {loading && <p>Loading...</p>}
             </form>
         </div>
     );

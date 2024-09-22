@@ -20,11 +20,21 @@ function App() {
         <ToastContainer />
         <Routes>
         <Route path="/" element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['user','admin']}>
                     <Dashboard /> 
                 </ProtectedRoute>
             } />
+            <Route 
+                    path="/admin-dashboard" 
+                    element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <h1>Admin Dashboard</h1>
+                        </ProtectedRoute>
+                    } 
+                />
             <Route path="/login" element={<Login />} />
+            <Route path="/forbidden" element={<h1>Forbidden</h1>} />
+
            
         </Routes>
     </Router>

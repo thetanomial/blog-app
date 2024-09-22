@@ -47,7 +47,7 @@ router.post('/register', [
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        user = new User({ email, password: await bcrypt.hash(password, 10) });
+        user = new User({ email, password: await bcrypt.hash(password, 10), role:'user' });
         await user.save();
 
         const payload = { user: { id: user.id } };
