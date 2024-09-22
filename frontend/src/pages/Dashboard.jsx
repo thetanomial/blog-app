@@ -26,8 +26,11 @@ const Dashboard = () => {
 
     return (
         <>
-            <h1>User Dashboard</h1>
+            <h1>Current User details :  </h1>
+            <p>{JSON.stringify(user)}</p>
             <button onClick={logout}>Log out</button>
+            <button onClick={()=>navigate('my-posts')}>My Posts</button>
+            <button onClick={()=>navigate('add-post')}>Add Post</button>
         </>
     );
 };

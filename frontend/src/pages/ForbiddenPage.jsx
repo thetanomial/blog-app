@@ -13,6 +13,7 @@ const ForbiddenPage = () => {
         <div className="forbidden-container">
             <h1 className="forbidden-title">403 Forbidden</h1>
             <p className="forbidden-message">You do not have permission to access this page.</p>
+            <p className="forbidden-message">Also, you have been logged out.</p>
             <button className="forbidden-button" onClick={handleGoBack}>
                 Go Back
             </button>

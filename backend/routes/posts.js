@@ -3,23 +3,26 @@ import Post from '../models/Post.js'
 import asyncWrapper from '../middlewares/asyncWrapper.js';
 import { uploadFiles } from '../firebase/uploadFiles.js';
 import multer from 'multer';
+import getSignedUrl from '../firebase/utils.js';
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Create a new post
 router.post('/', upload.array('images', 5), asyncWrapper(async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, isPublished } = req.body; // Get isPublished from request body
   const files = req.files;
 
   // Upload the images and get the image URLs
   const imageLinks = await uploadFiles(files);
 
-  // Create a new post instance with the uploaded image URLs
+  // Create a new post instance with the uploaded image URLs and createdBy field
   const post = new Post({
     title,
     content,
     images: imageLinks, // Save the image URLs in the "images" field
+    isPublished: isPublished === 'true', // Convert to boolean if needed
+    createdBy: req.user.id, // Assuming req.user contains the authenticated user
   });
 
   await post.save();
@@ -48,7 +51,34 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// Get posts created by the authenticated user
+router.get('/my-posts', async (req, res) => {
+  try {
+    const posts = await Post.find({ createdBy: req.user.id });
 
+    // Map through the posts to generate signed URLs for each image
+    const postsWithSignedUrls = await Promise.all(posts.map(async (post) => {
+      const signedUrls = await Promise.all(post.images.map(async (image) => {
+        // Extract the filename from the URL
+        const fileName = image.split('/').pop(); // Get the last part of the URL
+        console.log(fileName)
+        return await getSignedUrl(`${fileName}`); // Call getSignedUrl with the correct path
+      }));
+
+      return {
+        ...post.toObject(), // Convert mongoose document to plain object
+        images: signedUrls, // Replace images array with signed URLs
+      };
+    }));
+
+    res.json(postsWithSignedUrls);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Get a single post by ID
 // Get a single post by ID
 router.get('/posts/:id', async (req, res) => {
   try {
@@ -56,11 +86,24 @@ router.get('/posts/:id', async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
-    res.json(post);
+
+    // Generate signed URLs for each image in the post
+    const signedUrls = await Promise.all(post.images.map(async (image) => {
+      const fileName = image.split('/').pop(); // Extract the filename
+      return await getSignedUrl(`${fileName}`); // Get signed URL
+    }));
+
+    const postWithSignedUrls = {
+      ...post.toObject(), // Convert mongoose document to plain object
+      images: signedUrls, // Replace images array with signed URLs
+    };
+
+    res.json(postWithSignedUrls);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Delete a post
 router.delete('/posts/:id', async (req, res) => {

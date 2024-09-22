@@ -124,3 +124,281 @@ body {
 .forbidden-button:hover {
   background-color: #0056b3;
 }
+
+
+/* Add Post Form Styling */
+.add-post-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f7f9fc;
+}
+
+.add-post-form {
+  background-color: #ffffff;
+  padding: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.add-post-title {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.add-post-group {
+  margin-bottom: 20px;
+}
+
+.add-post-input,
+.add-post-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.add-post-textarea {
+  min-height: 150px; /* Set minimum height for textarea */
+}
+
+.add-post-input:focus,
+.add-post-textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.add-post-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-post-button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .add-post-form {
+      padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-post-title {
+      font-size: 24px;
+  }
+
+  .add-post-input, 
+  .add-post-textarea, 
+  .add-post-button {
+      font-size: 14px;
+  }
+}
+
+
+
+/* 
+
+*/
+/* Checkbox Styling */
+.add-post-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-post-group input[type="checkbox"] {
+  margin-right: 10px; /* Space between checkbox and label */
+  transform: scale(1.2); /* Increase checkbox size */
+}
+
+.add-post-group label {
+  font-size: 16px; /* Label font size */
+  color: #333; /* Label color */
+  cursor: pointer; /* Pointer on hover */
+}
+
+
+/* My Posts Page Styling */
+.my-posts-container {
+  padding: 40px;
+  background-color: #f7f9fc;
+  max-width: 800px;
+  margin: auto;
+}
+
+.my-posts-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.no-posts-message {
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+}
+
+.posts-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-item {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.post-content {
+  font-size: 16px;
+  color: #555;
+  margin: 10px 0;
+}
+
+.post-images {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.post-image {
+  max-width: 100px;
+  max-height: 100px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .my-posts-container {
+    padding: 30px;
+  }
+
+  .my-posts-title {
+    font-size: 24px;
+  }
+
+  .post-title {
+    font-size: 20px;
+  }
+
+  .post-content {
+    font-size: 14px;
+  }
+
+  .post-image {
+    max-width: 80px;
+    max-height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-posts-title {
+    font-size: 20px;
+  }
+
+  .post-title {
+    font-size: 18px;
+  }
+
+  .post-content {
+    font-size: 12px;
+  }
+}
+
+
+.single-post-container {
+  padding: 40px;
+  background-color: #f7f9fc;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.single-post-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.single-post-content {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.single-post-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.single-post-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 400px; /* Set a max height for better control */
+  margin: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  object-fit: cover; /* Ensures images maintain aspect ratio */
+}
+
+@media (max-width: 768px) {
+  .single-post-container {
+    padding: 30px;
+  }
+
+  .single-post-title {
+    font-size: 28px;
+  }
+
+  .single-post-content {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .single-post-title {
+    font-size: 24px;
+  }
+
+  .single-post-content {
+    font-size: 14px;
+  }
+
+  .single-post-image {
+    max-height: 300px; /* Reduce max height for smaller screens */
+  }
+}

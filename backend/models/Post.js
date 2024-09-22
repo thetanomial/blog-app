@@ -19,8 +19,13 @@ const postSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId, // Assuming you're referencing the User model
+    ref: 'User', // Reference to the User model
+    required: true,
+  },
 }, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
 
-export default Post
+export default Post;
