@@ -6,6 +6,25 @@ import User from '../models/User.js'; // Adjust the import according to your use
 import authMiddleware from '../middlewares/auth.js';
 
 const router = express.Router();
+
+
+router.get('/user', authMiddleware, async (req, res) => {
+    try {
+        // Find the user by ID stored in req.user (from the auth middleware)
+        const user = await User.findById(req.user.id).select('-password'); // Omit the password from the response
+        
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
 // Register Route
 router.post('/register', [
     body('email').isEmail(),
@@ -55,6 +74,10 @@ router.post('/login', [
     }
 
     const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ msg: 'Please provide all the credentials.' });
+    }
 
     try {
         const user = await User.findOne({ email });

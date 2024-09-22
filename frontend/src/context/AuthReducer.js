@@ -6,7 +6,14 @@ const AuthReducer = (state, action) => {
                 ...state,
                 isAuthenticated: true,
                 token: action.payload,
-                loading: false, // Ensure loading is false on login
+                loading: false,
+            };
+        case 'SET_USER':
+            return {
+                ...state,
+                user: action.payload, // Set the user details
+                isAuthenticated: true,
+                loading: false,
             };
         case 'LOGOUT':
             return {
@@ -14,7 +21,7 @@ const AuthReducer = (state, action) => {
                 isAuthenticated: false,
                 token: null,
                 user: null,
-                loading: false, // Ensure loading is false on logout
+                loading: false,
             };
         case 'SET_LOADING':
             return {

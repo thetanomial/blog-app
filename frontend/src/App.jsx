@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard'
 import ProtectedPage from './pages/ProtectedPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -14,6 +17,7 @@ function App() {
 
   return (
     <Router>
+        <ToastContainer />
         <Routes>
         <Route path="/" element={
                 <ProtectedRoute>
