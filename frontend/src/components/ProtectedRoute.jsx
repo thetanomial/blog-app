@@ -3,11 +3,14 @@ import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { getCurrentUser } from '../services/authService';
+import { toast } from 'react-toastify';
+import useLogout from '../hooks/useLogout';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
     const { state, dispatch } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const logout = useLogout()
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -30,13 +33,16 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     }
 
     if (!state.isAuthenticated) {
+        toast.info("Please login first...")
         return <Navigate to="/login" replace />;
     }
 
     const userRole = state.user ? state.user.role : null;
     if (allowedRoles && !allowedRoles.includes(userRole)) {
-        localStorage.removeItem('token'); // Remove token if access is forbidden
-        return <Navigate to="/forbidden" replace />;
+
+        return logout("/forbidden")
+         // Remove token if access is forbidden
+        // return <Navigate to="/forbidden" replace />;
     }
 
     return children; // Render the protected component

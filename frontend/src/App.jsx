@@ -5,11 +5,14 @@ import './App.css'
 import Login from './pages/Login'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard'
+import AdminDashboard from './pages/AdminDashboard'
+
 import ProtectedPage from './pages/ProtectedPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import ForbiddenPage from './pages/ForbiddenPage'
 
 
 function App() {
@@ -28,12 +31,12 @@ function App() {
                     path="/admin-dashboard" 
                     element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <h1>Admin Dashboard</h1>
+                            <AdminDashboard />
                         </ProtectedRoute>
                     } 
                 />
             <Route path="/login" element={<Login />} />
-            <Route path="/forbidden" element={<h1>Forbidden</h1>} />
+            <Route path="/forbidden" element={<ForbiddenPage />} />
 
            
         </Routes>

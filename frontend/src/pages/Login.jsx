@@ -30,10 +30,12 @@ const Login = () => {
 
             if (currentUser.role==="admin"){
                 navigate("/admin-dashboard")
-            }else{
+            }else if(currentUser.role==="user"){
 
 
                 navigate("/")
+            }else{
+                navigate("/forbidden")
             }
         } catch (error) {
             if (error.code === "ERR_NETWORK") {

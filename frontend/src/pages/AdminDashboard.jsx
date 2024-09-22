@@ -6,11 +6,10 @@ import useLogout from '../hooks/useLogout';
 const Dashboard = () => {
     const navigate = useNavigate();
     const { dispatch, state } = useContext(AuthContext);
-    const logout = useLogout()
 
     const { user, loading } = state; // Destructure user and loading state
 
-    
+    const logout = useLogout()
 
     useEffect(() => {
         if (!loading && !user) {
@@ -26,7 +25,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <h1>User Dashboard</h1>
+            <h1>Admin Dashboard</h1>
             <button onClick={logout}>Log out</button>
         </>
     );
