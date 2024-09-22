@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { addPost } from '../services/postsService.js';
 import { toast } from 'react-toastify';
+
 const AddPost = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [images, setImages] = useState(null);
     const [isPublished, setIsPublished] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); // New state variable
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true); // Set submitting to true
 
         const formData = new FormData();
         formData.append('title', title);
@@ -23,10 +26,17 @@ const AddPost = () => {
         try {
             const newPost = await addPost(formData);
             toast.success('Post created successfully');
-            // Handle success (e.g., show a success message, redirect, etc.)
+
+            // Reset the form fields
+            setTitle('');
+            setContent('');
+            setImages(null);
+            setIsPublished(false);
         } catch (error) {
             console.error('Error creating post:', error);
-            // Handle error (e.g., show an error message)
+            toast.error('Error creating post. Please try again.');
+        } finally {
+            setIsSubmitting(false); // Reset submitting to false
         }
     };
 
@@ -71,7 +81,13 @@ const AddPost = () => {
                         Publish
                     </label>
                 </div>
-                <button type="submit" className="add-post-button">Submit</button>
+                <button 
+                    type="submit" 
+                    className="add-post-button" 
+                    disabled={isSubmitting} // Disable the button if submitting
+                >
+                    {isSubmitting ? 'Hold on a second, submitting...' : 'Submit'} {/* Button text based on submitting state */}
+                </button>
             </form>
         </div>
     );
